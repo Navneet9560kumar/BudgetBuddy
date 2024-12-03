@@ -1,70 +1,92 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaChartPie, FaPlus } from 'react-icons/fa';
+import BudgetTable from './BudgetTable';
+import BudgetChart from './BudgetChart';
+import AddBudgetModal from './AddBudgetModal';
 
 const Budget = () => {
-  const budgets = [
+  const [budgets, setBudgets] = useState([
     { id: 1, category: "Rent", allocated: 10000, spent: 8000 },
     { id: 2, category: "Groceries", allocated: 5000, spent: 3000 },
     { id: 3, category: "Entertainment", allocated: 2000, spent: 1000 },
-  ];
+  ]);
 
-  // Calculate progress as percentage
-  const calculateProgress = (spent, allocated) => {
-    return (spent / allocated) * 100;
+  const [showChart, setShowChart] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const toggleChart = () => setShowChart(!showChart);
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
+  const addBudget = (newBudget) => {
+    setBudgets([...budgets, { ...newBudget, id: budgets.length + 1 }]);
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-semibold mb-6 text-gray-800">Budget Overview</h1>
-      <div className="overflow-x-auto shadow-xl rounded-lg">
-        <table className="w-full text-left table-auto border-separate space-y-4">
-          <thead className="bg-gray-700 text-white">
-            <tr>
-              <th className="py-3 px-6">Category</th>
-              <th className="py-3 px-6">Allocated</th>
-              <th className="py-3 px-6">Spent</th>
-              <th className="py-3 px-6">Progress</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white">
-            {budgets.map((budget) => (
-              <tr
-                key={budget.id}
-                className="hover:bg-gray-100 transition-colors duration-300"
-              >
-                <td className="py-4 px-6 text-gray-700">{budget.category}</td>
-                <td className="py-4 px-6 text-gray-700">₹{budget.allocated}</td>
-                <td className="py-4 px-6 text-gray-700">₹{budget.spent}</td>
-                <td className="py-4 px-6">
-                  <div className="relative pt-1">
-                    <div className="flex mb-2 items-center justify-between">
-                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-teal-600 bg-teal-200">
-                        {Math.round(calculateProgress(budget.spent, budget.allocated))}%
-                      </span>
-                    </div>
-                    <div className="flex mb-2">
-                      <div className="relative flex w-full flex-col">
-                        <div className="flex mb-2 items-center justify-between">
-                          <div className="w-full bg-gray-200 rounded-full">
-                            <div
-                              style={{
-                                width: `${calculateProgress(budget.spent, budget.allocated)}%`,
-                              }}
-                              className={`bg-teal-500 h-2 rounded-full`}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="p-8"
+    >
+      <div className="flex justify-between items-center mb-6">
+        <motion.h1
+          initial={{ x: -20 }}
+          animate={{ x: 0 }}
+          className="text-3xl font-semibold text-gray-800"
+        >
+          Budget Overview
+        </motion.h1>
+        <div className="space-x-2">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleChart}
+            className="bg-blue-500 text-white py-2 px-4 rounded-full flex items-center"
+          >
+            <FaChartPie className="mr-2" />
+            {showChart ? 'Show Table' : 'Show Chart'}
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={openModal}
+            className="bg-green-500 text-white py-2 px-4 rounded-full flex items-center"
+          >
+            <FaPlus className="mr-2" />
+            Add Budget
+          </motion.button>
+        </div>
       </div>
-    </div>
+      <AnimatePresence mode="wait">
+        {showChart ? (
+          <motion.div
+            key="chart"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <BudgetChart budgets={budgets} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="table"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <BudgetTable budgets={budgets} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AddBudgetModal isOpen={showModal} onClose={closeModal} onAdd={addBudget} />
+    </motion.div>
   );
 };
 
 export default Budget;
+
