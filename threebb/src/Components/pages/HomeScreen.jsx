@@ -23,6 +23,10 @@ const HomeScreen = ({ setShowSidebar }) => {
     navigate('/signin');
   };
 
+  const handleLearnMore = () => {
+    navigate('/learn-more'); // Redirect to Learn More page
+  };
+
   return (
     <div className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
       {/* Background with parallax effect */}
@@ -117,7 +121,7 @@ const HomeScreen = ({ setShowSidebar }) => {
           <Button
             size="lg"
             variant="outline"
-            onClick={() => navigate('/learn-more')}
+            onClick={handleLearnMore} // Navigate to Learn More page
             className="bg-gray-800/50 hover:bg-gray-700/50 text-white border-gray-600 shadow-lg hover:shadow-gray-500/50 transition-all duration-300"
           >
             Learn More

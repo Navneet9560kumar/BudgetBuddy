@@ -133,16 +133,16 @@ const HomeScreen = ({ setShowSidebar }) => {
             style={{ height: '45%' }}
           >
             <div className="flex flex-col gap-4 text-white">
-              <Button onClick={() => scrollToSection(featuresRef)} className="mb-4">
+              <Button onClick={() => scrollToSection(featuresRef)} className="mb-4 text-lg">
                 Features
               </Button>
-              <Button onClick={() => scrollToSection(pricingRef)} className="mb-4">
+              <Button onClick={() => scrollToSection(pricingRef)} className="mb-4 text-lg">
                 Pricing
               </Button>
-              <Button onClick={() => scrollToSection(aboutRef)} className="mb-4">
+              <Button onClick={() => scrollToSection(aboutRef)} className="mb-4 text-lg">
                 About Us
               </Button>
-              <Button onClick={() => scrollToSection(contactRef)} className="mb-4">
+              <Button onClick={() => scrollToSection(contactRef)} className="mb-4 text-lg ">
                 Contact
               </Button>
             </div>
