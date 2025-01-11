@@ -1,17 +1,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-'use client';
+"use client";
 
-import React, { useState, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import useAuth from '../hook/Useuser';
-import { Button } from '../ui/Button';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/Avtar';
-import Features from './Features';
-import Pricing from './Pricing';
-import AboutUs from './AboutUs';
-import Contact from './Contact';
+import React, { useState, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import useAuth from "../hook/Useuser";
+import { Button } from "../ui/Button";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avtar";
+import Features from "./Component/HomeScreens/Features/Features";
+import Pricing from "./Component/HomeScreens/Pricing/Pricing";
+import AboutUs from "./AboutUs";
+import Contact from "./Contact";
 
 const HomeScreen = ({ setShowSidebar }) => {
   const navigate = useNavigate();
@@ -27,12 +27,12 @@ const HomeScreen = ({ setShowSidebar }) => {
 
   const handleGetStarted = () => {
     setShowSidebar(true);
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   const handleLogout = () => {
     window.Clerk.signOut();
-    navigate('/signin');
+    navigate("/signin");
   };
 
   const toggleMenu = () => {
@@ -40,7 +40,7 @@ const HomeScreen = ({ setShowSidebar }) => {
   };
 
   const scrollToSection = (ref) => {
-    ref.current.scrollIntoView({ behavior: 'smooth' });
+    ref.current.scrollIntoView({ behavior: "smooth" });
     setIsMenuOpen(false);
   };
 
@@ -51,17 +51,17 @@ const HomeScreen = ({ setShowSidebar }) => {
         className="fixed inset-0 z-0"
         initial={{ scale: 1.1 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 10, repeat: Infinity, repeatType: 'reverse' }}
+        transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
       >
-       <img
+        <img
           src={
-            hoveredSection === 'features'
+            hoveredSection === "features"
               ? "https://media.istockphoto.com/id/1484758499/photo/indian-rupee-symbol-with-business-chart-3d-illustration.webp?a=1&b=1&s=612x612&w=0&k=20&c=ey87a2z5d1pAErsTCyQgzi14NHso-pDLsFk6Q1w0oUQ="
-              : hoveredSection === 'pricing'
+              : hoveredSection === "pricing"
               ? "https://plus.unsplash.com/premium_photo-1677692593965-28c886409cfb?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJpY2V8ZW58MHx8MHx8fDA%3D"
-              : hoveredSection === 'about'
+              : hoveredSection === "about"
               ? "https://media.istockphoto.com/id/1363582851/photo/businessman-holding-graph.webp?a=1&b=1&s=612x612&w=0&k=20&c=5lrmpwExixi92SAynKvxFJVu10OoDZ_azhFxpXilyJo="
-              : hoveredSection === 'contact'
+              : hoveredSection === "contact"
               ? "https://media.istockphoto.com/id/1167014995/photo/lears-macaw.webp?a=1&b=1&s=612x612&w=0&k=20&c=Ve5vEPOrutuEfMrGmzpBtpe8DM92dye-84OhagzyFDE="
               : "https://plus.unsplash.com/premium_photo-1681487912304-274bac203320?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
           }
@@ -88,8 +88,13 @@ const HomeScreen = ({ setShowSidebar }) => {
         {isSignedIn ? (
           <>
             <Avatar className="border-2 border-white">
-              <AvatarImage src={user?.profileImageUrl} alt={`${user?.firstName}'s Profile`} />
-              <AvatarFallback className="bg-gray-800 text-white">{user?.firstName?.[0] || 'U'}</AvatarFallback>
+              <AvatarImage
+                src={user?.profileImageUrl}
+                alt={`${user?.firstName}'s Profile`}
+              />
+              <AvatarFallback className="bg-gray-800 text-white">
+                {user?.firstName?.[0] || "U"}
+              </AvatarFallback>
             </Avatar>
             <Button
               variant="destructive"
@@ -102,7 +107,7 @@ const HomeScreen = ({ setShowSidebar }) => {
         ) : (
           <Button
             variant="secondary"
-            onClick={() => navigate('/signin')}
+            onClick={() => navigate("/signin")}
             className="shadow-lg hover:shadow-blue-500/50 transition-all duration-300"
           >
             Sign In
@@ -117,7 +122,7 @@ const HomeScreen = ({ setShowSidebar }) => {
           onClick={toggleMenu}
           className="bg-gray-800/50 hover:bg-gray-700/50 text-white border-gray-600 shadow-lg hover:shadow-gray-500/50 transition-all duration-300"
         >
-          {isMenuOpen ? 'Close Menu' : 'Menu'}
+          {isMenuOpen ? "Close Menu" : "Menu"}
         </Button>
       </div>
 
@@ -126,23 +131,35 @@ const HomeScreen = ({ setShowSidebar }) => {
         {isMenuOpen && (
           <motion.div
             className="fixed top-0 left-0 w-full bg-black/90 text-white p-6 z-30"
-            initial={{ y: '-100%' }}
+            initial={{ y: "-100%" }}
             animate={{ y: 0 }}
-            exit={{ y: '-100%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            style={{ height: '45%' }}
+            exit={{ y: "-100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            style={{ height: "45%" }}
           >
             <div className="flex flex-col gap-4 text-white">
-              <Button onClick={() => scrollToSection(featuresRef)} className="mb-4 text-lg">
+              <Button
+                onClick={() => scrollToSection(featuresRef)}
+                className="mb-4 text-lg"
+              >
                 Features
               </Button>
-              <Button onClick={() => scrollToSection(pricingRef)} className="mb-4 text-lg">
+              <Button
+                onClick={() => scrollToSection(pricingRef)}
+                className="mb-4 text-lg"
+              >
                 Pricing
               </Button>
-              <Button onClick={() => scrollToSection(aboutRef)} className="mb-4 text-lg">
+              <Button
+                onClick={() => scrollToSection(aboutRef)}
+                className="mb-4 text-lg"
+              >
                 About Us
               </Button>
-              <Button onClick={() => scrollToSection(contactRef)} className="mb-4 text-lg ">
+              <Button
+                onClick={() => scrollToSection(contactRef)}
+                className="mb-4 text-lg "
+              >
                 Contact
               </Button>
             </div>
@@ -206,7 +223,7 @@ const HomeScreen = ({ setShowSidebar }) => {
         <div
           ref={featuresRef}
           className="w-full"
-          onMouseEnter={() => setHoveredSection('features')}
+          onMouseEnter={() => setHoveredSection("features")}
           onMouseLeave={() => setHoveredSection(null)}
         >
           <Features />
@@ -216,7 +233,7 @@ const HomeScreen = ({ setShowSidebar }) => {
         <div
           ref={pricingRef}
           className="w-full"
-          onMouseEnter={() => setHoveredSection('pricing')}
+          onMouseEnter={() => setHoveredSection("pricing")}
           onMouseLeave={() => setHoveredSection(null)}
         >
           <Pricing />
@@ -226,7 +243,7 @@ const HomeScreen = ({ setShowSidebar }) => {
         <div
           ref={aboutRef}
           className="w-full"
-          onMouseEnter={() => setHoveredSection('about')}
+          onMouseEnter={() => setHoveredSection("about")}
           onMouseLeave={() => setHoveredSection(null)}
         >
           <AboutUs />
@@ -236,7 +253,7 @@ const HomeScreen = ({ setShowSidebar }) => {
         <div
           ref={contactRef}
           className="w-full"
-          onMouseEnter={() => setHoveredSection('contact')}
+          onMouseEnter={() => setHoveredSection("contact")}
           onMouseLeave={() => setHoveredSection(null)}
         >
           <Contact />
@@ -247,4 +264,3 @@ const HomeScreen = ({ setShowSidebar }) => {
 };
 
 export default HomeScreen;
-

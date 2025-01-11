@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '../ui/Button';
+import React from "react";
+import { motion } from "framer-motion";
+import { Button } from "../../../../ui/Button";
 
 const Pricing = () => {
   return (
@@ -18,9 +18,35 @@ const Pricing = () => {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { title: "Basic", price: "$0", features: ["Basic Budgeting", "Expense Tracking", "Limited Insights"] },
-            { title: "Pro", price: "$9.99", features: ["Advanced Budgeting", "Detailed Insights", "Goal Setting", "Bill Reminders"] },
-            { title: "Enterprise", price: "Custom", features: ["All Pro Features", "Dedicated Support", "Custom Integrations", "Team Management"] },
+            {
+              title: "Basic",
+              price: "$0",
+              features: [
+                "Basic Budgeting",
+                "Expense Tracking",
+                "Limited Insights",
+              ],
+            },
+            {
+              title: "Pro",
+              price: "$9.99",
+              features: [
+                "Advanced Budgeting",
+                "Detailed Insights",
+                "Goal Setting",
+                "Bill Reminders",
+              ],
+            },
+            {
+              title: "Enterprise",
+              price: "Custom",
+              features: [
+                "All Pro Features",
+                "Dedicated Support",
+                "Custom Integrations",
+                "Team Management",
+              ],
+            },
           ].map((plan, index) => (
             <motion.div
               key={index}
@@ -35,8 +61,19 @@ const Pricing = () => {
               <ul className="mb-6 flex-grow">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="mb-2 flex items-center">
-                    <svg className="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                    <svg
+                      className="w-4 h-4 mr-2 text-green-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      ></path>
                     </svg>
                     {feature}
                   </li>
@@ -58,4 +95,3 @@ const Pricing = () => {
 };
 
 export default Pricing;
-
