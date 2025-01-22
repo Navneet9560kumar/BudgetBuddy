@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef } from 'react';
 import Features from '../../Features';
 import Pricing from '../../Pricing';
-import AboutUs from '../../AboutUs';
+import AboutUs from './AboutUs';
 import Contact from '../../Contact';
 import Button from './Button'; // Assuming a Button component exists
 

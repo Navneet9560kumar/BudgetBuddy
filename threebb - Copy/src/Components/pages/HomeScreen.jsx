@@ -6,11 +6,11 @@ import React, { useState, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import useAuth from "../hook/Useuser";
-import { Button } from "../ui/Button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avtar";
+import { Button } from "./ui/Button";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avtar";
 import Features from "./Component/HomeScreens/Features/Features";
 import Pricing from "./Component/HomeScreens/Pricing/Pricing";
-import AboutUs from "./AboutUs";
+import AboutUs from "./Component/HomeScreens/AboutUs";
 import Contact from "./Contact";
 
 const HomeScreen = ({ setShowSidebar }) => {
