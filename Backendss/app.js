@@ -1,32 +1,39 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import connectDB from './src/config/db.js'; // Importing connectDB from db.js
-import authRoutes from './src/routes/authRight.js';
-import expenseRoutes from './src/routes/expenseRoutes.js';
-import { ClerkExpress } from '@clerk/express'; // Import Clerk's ClerkExpress middleware
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./src/config/db.js";
+import authRoutes from "./src/routes/authRouter.js"; // ✅
+import expenseRoutes from "./src/routes/expenseRoutes.js";
+import cookieParser from "cookie-parser";
+import budgetRoutes from "./src/routes/budgetRoutes.js"
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
+app.use(cookieParser());
+connectDB();
 
-// Connect to the database
-connectDB(); // Call connectDB to establish the database connection
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 
-// Middlewares
-app.use(cors());
 app.use(express.json());
 
-// Public routes
-app.use('/api/auth', authRoutes);
+app.use("/api/budgets", budgetRoutes)
 
-// Protected routes (Only authenticated users can access)
-app.use('/api/expenses', ClerkExpress(), expenseRoutes); // Clerk's ClerkExpress added
+// ✅ Protected Routes
+app.use("/api/expenses", expenseRoutes);
 
-// Error handling middleware
+
+// Keep this at the end:
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-export default app;
+app.use("/api/auth", authRoutes);
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+});

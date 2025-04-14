@@ -4,13 +4,20 @@ import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Sidebar from "../Components/Sidebar";
 import HomeScreen from "../Components/pages/HomeScreen";
-import Dashboard from "../Components/pages/Dashbord";
+import Dashboard from "../Components/pages/Dashboard"; 
+
 import Budget from "../Components/pages/Budget";
 import AddExpense from "../Components/pages/AddExpense";
-import Profile from "../Components/pages/Profile";
-import SignInPage from "../Components/pages/SignInPage";
-import SignUpPage from "../Components/pages/SignUpPage";
+import Profile from "../Components/pages/profile/Profile";
+
 import LearnMore from "../Components/pages/LearnMore"; // Import the new LearnMore component
+import Deatils from "../Components/pages/Details";
+
+import LoginPage from "../Components/pages/auth/Login";
+import SignupPage from "../Components/pages/auth/SingupPage";
+
+
+
 
 const AppRoutes = ({ showSidebar, setShowSidebar }) => {
   const location = useLocation();
@@ -31,13 +38,17 @@ const AppRoutes = ({ showSidebar, setShowSidebar }) => {
             path="/"
             element={<HomeScreen setShowSidebar={setShowSidebar} />}
           />
-          <Route path="/signin" element={<SignInPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
+      
+          
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/budget" element={<Budget />} />
           <Route path="/add-expense" element={<AddExpense />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/learn-more" element={<LearnMore />} /> {/* Add the new LearnMore route */}
+          <Route path="/expense" element={<Deatils/>} />
+          <Route path="/SingupPage"element={<SignupPage/>}/>
+          <Route path="/login"element={<LoginPage/>}/>
+         
         </Routes>
       </div>
     </div>

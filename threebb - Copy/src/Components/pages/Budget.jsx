@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChartPie, FaPlus } from 'react-icons/fa';
 import BudgetTable from './BudgetTable';
 import BudgetChart from './BudgetChart';
-import AddBudgetModal from './AddBudgetModal';
+import AddBudgetModal from '../pages/AddBudgetModalbhai';
 
 const Budget = () => {
   const [budgets, setBudgets] = useState([

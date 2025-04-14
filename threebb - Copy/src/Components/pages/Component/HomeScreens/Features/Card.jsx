@@ -26,7 +26,7 @@ export const CardContent = ({ children }) => {
 // CardTitle component
 export const CardTitle = ({ children }) => {
   return <h2 className="text-xl font-semibold text-gray-800">{children}</h2>;
-};
+};  
 
 // CardDescription component
 export const CardDescription = ({ children }) => {

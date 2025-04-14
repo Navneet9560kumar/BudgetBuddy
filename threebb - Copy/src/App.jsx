@@ -1,20 +1,15 @@
-/* eslint-disable no-unused-vars */
+// App.jsx
 import React, { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { ThemeProvider } from "./context/ThemeContext";
-import AppRoutes from "./routes/AppRoute"; // Importing Routes Component
+import AppRoutes from "./routes/AppRoute"; // Clean and single entry point for routes
 
 const App = () => {
   const [showSidebar, setShowSidebar] = useState(false); // State for Sidebar visibility
 
   return (
-    // Wrap the entire app in ThemeProvider and Router
-    <ThemeProvider>
-      <Router>
-        {/* Render the AppRoutes component and pass props */}
-        <AppRoutes showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-      </Router>
-    </ThemeProvider>
+ 
+      <AppRoutes showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+ 
   );
 };
 

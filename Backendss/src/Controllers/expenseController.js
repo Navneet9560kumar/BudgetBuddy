@@ -1,44 +1,93 @@
-import Expense from '../models/Expense.js'; // Updated model
+import Budget from "../models/Budget.js";
+import Expense from "../models/Expense.js";
 
-// Controller function to add a new expense
-export const addExpense = async (req, res) => {
-  const { amount, name, icon } = req.body; // Added 'name' and 'icon'
-  const userId = req.auth.userId; // Clerk se userId
-
-  if (!userId) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
+// ✅ CREATE EXPENSE
+export const createExpense = async (req, res) => {
+  console.log("Request body:", req.body); 
   try {
-    const newExpense = new Expense({
-      amount,
-      name, // Expense name
-      icon: icon || 'default-icon.png', // Default icon if none provided
-      createdBy: userId, // UserId linked to expense
+// Debugging line to check the request body
+    const {  source, amount } = req.body;
+    const userId = req.user?.id; // from decode token
+    console.log("User ID from token:", userId); // Debugging line to check the user ID
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized: User ID not found" });
+    }
+
+    const newBudget = new  Budget({
+    
+      source,
+      amount:Number(amount), // Ensure amount is a number
+      user: userId, // Associate the expense with the user
     });
 
-    await newExpense.save();
-
-    res.status(201).json({ message: "Expense added successfully", newExpense });
+    await newBudget.save();
+    res.status(201).json({
+      message: "Expense added successfully",
+      expense: newBudget,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to add expense" });
+    res.status(500).json({
+      message: "Error adding expense",
+      error: error.message,
+    });
   }
 };
 
-// Controller function to get all expenses for the authenticated user
+// ✅ GET EXPENSES for a user
 export const getExpenses = async (req, res) => {
-  const userId = req.auth.userId; // Clerk se user info milta hai
-
-  if (!userId) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
   try {
-    const expenses = await Expense.find({ createdBy: userId }); // Filter expenses by userId
-    res.status(200).json({ expenses });
+    const {userId} = req.params; // Extracting userId from the request parameters
+    console.log("Received request for userId in expenses:", userId); // Debugging line to check the user ID
+
+    // if (!userId) {
+    //   return res.status(401).json({ message: "Unauthorized: User ID not found" });
+    // }
+console.log("after userId",userId);
+    const expenses = await Budget.findOne({ user: userId });
+    console.log("expense",expenses);
+    res.status(200).json(expenses);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Failed to fetch expenses" });
+  }
+};
+
+// ✅ UPDATE EXPENSE
+export const updateExpense = async (req, res) => {
+  try {
+    const { name, product, amount } = req.body;
+    const { id } = req.params;
+    const userId = req.auth?.userId;
+
+    const updated = await Expense.findOneAndUpdate(
+      { _id: id, user: userId }, // Make sure user can only update their own expense
+      { name, product, amount },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Expense not found or unauthorized" });
+    }
+
+    res.status(200).json({ message: "Expense updated", updated });
+  } catch (error) {
+    res.status(500).json({ message: "Update failed", error: error.message });
+  }
+};
+
+// ✅ DELETE EXPENSE
+export const deleteExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.auth?.userId;
+
+    const deleted = await Expense.findOneAndDelete({ _id: id, user: userId });
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Expense not found or unauthorized" });
+    }
+
+    res.status(200).json({ message: "Expense deleted", deleted });
+  } catch (error) {
+    res.status(500).json({ message: "Delete failed", error: error.message });
   }
 };
