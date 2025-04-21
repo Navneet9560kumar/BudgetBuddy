@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Details = () => {
   const [name, setName] = useState("");
   const [seouce, setSeouce] = useState("");
-  
+
   const [salary, setSalary] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState("");
@@ -21,13 +21,13 @@ const Details = () => {
       name,
       seouce,
       amount: salary,
-    
     };
     console.log("Expense data:", expenseData);
 
     try {
-      const res = await fetch("http://localhost:5000/api/expenses", {
+      const res = await fetch("http://localhost:3000/api/expenses", {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,7 +42,7 @@ const Details = () => {
         setMessage("Expense submitted successfully ✅");
         setName("");
         setSeouce("");
-       
+
         setSalary("");
 
         navigate("/dashboard", {
@@ -50,7 +50,7 @@ const Details = () => {
             recentExpense: {
               name,
               seouce,
-             
+
               salary,
             },
           },
@@ -72,12 +72,16 @@ const Details = () => {
         </h1>
 
         {message && (
-          <div className="mb-4 text-center text-sm text-blue-800">{message}</div>
+          <div className="mb-4 text-center text-sm text-blue-800">
+            {message}
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700">Your Name</label>
+            <label className="block text-sm font-semibold text-gray-700">
+              Your Name
+            </label>
             <input
               type="text"
               value={name}
@@ -89,7 +93,9 @@ const Details = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700">Source of Income</label>
+            <label className="block text-sm font-semibold text-gray-700">
+              Source of Income
+            </label>
             <input
               type="text"
               value={seouce}
@@ -100,10 +106,10 @@ const Details = () => {
             />
           </div>
 
-       
-
           <div>
-            <label className="block text-sm font-semibold text-gray-700">Monthly Salary (₹)</label>
+            <label className="block text-sm font-semibold text-gray-700">
+              Monthly Salary (₹)
+            </label>
             <input
               type="number"
               value={salary}
@@ -126,8 +132,8 @@ const Details = () => {
           <div className="mt-6 bg-green-100 border border-green-300 p-4 rounded-xl text-center">
             <p className="text-lg font-medium text-green-700">
               Hi <span className="font-bold">{name}</span>
-              <span className="font-bold">{seouce}</span>. Your monthly salary is ₹
-              {salary}.
+              <span className="font-bold">{seouce}</span>. Your monthly salary
+              is ₹{salary}.
             </p>
           </div>
         )}

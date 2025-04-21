@@ -1,15 +1,15 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaChartPie, FaPlus } from 'react-icons/fa';
-import BudgetTable from './BudgetTable';
-import BudgetChart from './BudgetChart';
-import AddBudgetModal from './AddBudgetModal';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaChartPie, FaPlus } from "react-icons/fa";
+import BudgetTable from "./BudgetTable";
+import BudgetChart from "./BudgetChart";
+import AddBudgetModal from "./AddBudgetModal";
 
 const Budget = () => {
   const [budgets, setBudgets] = useState([
     { id: 1, category: "Rent", allocated: 10000, spent: 8000 },
-    { id: 2, category: "Groceries", allocated: 5000, spent: 3000 },
+    { id: 2, category: "Groceries", allocated: 3000, spent: 3000 },
     { id: 3, category: "Entertainment", allocated: 2000, spent: 1000 },
   ]);
 
@@ -47,7 +47,7 @@ const Budget = () => {
             className="bg-blue-500 text-white py-2 px-4 rounded-full flex items-center"
           >
             <FaChartPie className="mr-2" />
-            {showChart ? 'Show Table' : 'Show Chart'}
+            {showChart ? "Show Table" : "Show Chart"}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -83,10 +83,13 @@ const Budget = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <AddBudgetModal isOpen={showModal} onClose={closeModal} onAdd={addBudget} />
+      <AddBudgetModal
+        isOpen={showModal}
+        onClose={closeModal}
+        onAdd={addBudget}
+      />
     </motion.div>
   );
 };
 
 export default Budget;
-

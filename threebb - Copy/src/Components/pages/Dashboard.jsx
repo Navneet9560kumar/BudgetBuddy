@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
   // BarChart, Bar, XAxis, YAxis, CartesianGrid
 } from "recharts";
 import { motion } from "framer-motion";
@@ -11,40 +15,70 @@ import AddBudgetModal from "../../AddBudgetModal";
 
 const Dashboard = () => {
   const { isLoggedIn, data, isLoading } = useAuthContext();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [expenses, setExpenses] = useState([]);
-  const [budgets, setBudgets] = useState();
+  const [budgets, setBudgets] = useState(0);
   const [loadingExpenses, setLoadingExpenses] = useState(true);
   const [showBudgetModal, setShowBudgetModal] = useState(false);
 
-  useEffect(() => {
-    if (!isLoggedIn && !isLoading) {
-      navigate("/signin");
-    }
-  }, [isLoggedIn, isLoading, navigate]);
 
   useEffect(() => {
+    const fetchBudgets = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("authToken");
+
+        const res = await fetch(
+          `http://localhost:3000/api/expenses/user/${userId}`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = await res.json();
+        console.log("Budgets data:", data);
+
+        setBudgets( data); 
+      } catch (err) {
+        console.error("Error fetching budgets:", err.message);
+      }
+    };
+
     const fetchExpenses = async () => {
       try {
         const userId = localStorage.getItem("userId");
         const token = localStorage.getItem("authToken");
-        const res = await fetch(`http://localhost:5000/api/budgets/user/${userId}`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        console.log("user id hai ?", userId)
+        const res = await fetch(
+          `http://localhost:3000/api/budgets/user/${userId}`,
+          {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // const data = await res.json();
+        // console.log("Expenses data:", data);
+
+      
 
         const data = await res.json();
         console.log("Expenses data:", data);
-        if(!data.success) 
-        {setExpenses([])}
-        else {
-          setExpenses(data)
+
+        if (!data ||  !Array.isArray(data)) {
+          setExpenses([]);
+        } else {
+          setExpenses(data);
         }
-        
       } catch (err) {
         console.error("Error fetching expenses:", err.message);
       } finally {
@@ -52,39 +86,34 @@ const Dashboard = () => {
       }
     };
 
-    const fetchBudgets = async () => { // ye mera budget de raha hai
-
-      try {
-        const userId = localStorage.getItem("userId");
-        console.log("user id", userId);
-        const res = await fetch(`http://localhost:5000/api/expenses/user/${userId}`);
-
-      
-        const data = await res.json();
-        console.log("budgets", data);
-        setBudgets(data.amount);
-      } catch (err) {
-        console.error("Error fetching budgets:", err.message);
-      }
-    };
-
     if (isLoggedIn) {
-      fetchExpenses();
       fetchBudgets();
+      fetchExpenses();
     }
   }, [isLoggedIn]);
 
+  // const totalExpenses = expenses.reduce((acc, curr) => acc + curr.amount, 0);
+
+  const income = budgets?.amount || 0;
   const totalExpenses = expenses.reduce((acc, curr) => acc + curr.amount, 0);
- 
-  const income = budgets;
-  // eslint-disable-next-line no-unused-vars
   const balance = income - totalExpenses;
+
+  // const pieData = [
+  //   { name: "Income", value: income },
+  //   { name: "Expenses", value: totalExpenses },
+  //   { name: "Budget", value: balance },
+  // ];
+
+  // console.log("Pie Data:", pieData);
 
   const pieData = [
     { name: "Income", value: income },
     { name: "Expenses", value: totalExpenses },
     { name: "Budget", value: balance },
   ];
+  console.log("Budgets data:", budgets); // Check array format
+  console.log("Expenses data:", expenses);
+  console.log("Pie Data:", pieData);
 
   const COLORS = ["#00C49F", "#FF8042", "#0088FE"];
 
@@ -109,12 +138,10 @@ const Dashboard = () => {
           </motion.button>
 
           {showBudgetModal && (
-            
             <AddBudgetModal
               closeModal={() => setShowBudgetModal(false)}
-              onBudgetAdded={(newBudget) => setExpenses([...expenses, newBudget])}
+              onBudgetAdded={(newBudget) => setBudgets([...budgets, newBudget])}
             />
-            
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -122,9 +149,20 @@ const Dashboard = () => {
               <h2 className="font-semibold text-xl mb-4">Financial Overview</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
-                  <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={80}
+                    label
+                  >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -139,11 +177,19 @@ const Dashboard = () => {
               ) : (
                 <ul className="space-y-3">
                   {expenses.map((exp) => (
-                    <li key={exp._id || exp.createdAt} className="bg-white rounded p-3 shadow-sm">
-                      <p><strong>Product:</strong> {exp.product}</p>
-                      <p><strong>Amount:</strong> ₹{exp.amount}</p>
+                    <li
+                      key={exp._id || exp.createdAt}
+                      className="bg-white rounded p-3 shadow-sm"
+                    >
+                      <p>
+                        <strong>Product:</strong> {exp.product}
+                      </p>
+                      <p>
+                        <strong>Amount:</strong> ₹{exp.amount}
+                      </p>
                       <p className="text-sm text-gray-500">
-                        <strong>Date:</strong> {new Date(exp.createdAt).toLocaleDateString()}
+                        <strong>Date:</strong>{" "}
+                        {new Date(exp.createdAt).toLocaleDateString()}
                       </p>
                     </li>
                   ))}

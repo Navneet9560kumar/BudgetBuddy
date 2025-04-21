@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+// AddBudgetModal.jsx
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 
@@ -7,39 +7,38 @@ const AddBudgetModal = ({ closeModal, onBudgetAdded }) => {
   const [amount, setAmount] = useState("");
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
-      const userId = localStorage.getItem("userId");
-     
-    
-      try {
-        const res = await fetch("http://localhost:5000/api/budgets/add", 
-            
-            {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-           
-          },
-          body: JSON.stringify({ 
-            userId,
-             category,
-              amount: Number(amount) }),
-        });
-    
-        if (!res.ok) throw new Error("Failed to add budget");
-    
-        const data = await res.json();
-        onBudgetAdded(data);
-        closeModal();
-      } catch (error) {
-        console.error("Error adding budget:", error.message);
-      }
-    };
-    
+    e.preventDefault();
+    // closeModal();
+
+    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem("authToken");
+
+    try {
+      const res = await fetch("http://localhost:3000/api/budgets/add", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId,
+          category,
+          amount: Number(amount),
+        }),
+      });
+
+
+      const data = await res.json();
+      console.log("data", data);
+      onBudgetAdded(data); // ✅ this is the correct way
+      closeModal();
+    } catch (error) {
+      console.error("Error adding budget:", error.message);
+    }
+  };
 
   return (
-
     <div className="z-50 fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center">
       <div className="bg-white p-6 rounded shadow w-[90%] md:w-[400px]">
         <h2 className="text-xl font-bold mb-4">Add Budget</h2>
@@ -68,7 +67,10 @@ const AddBudgetModal = ({ closeModal, onBudgetAdded }) => {
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-500 text-white rounded"
+            >
               Add
             </button>
           </div>

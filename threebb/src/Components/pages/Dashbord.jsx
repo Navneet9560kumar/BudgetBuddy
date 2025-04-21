@@ -1,7 +1,18 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+} from "recharts";
 import useAuth from "../hook/Useuser"; // Adjust path if necessary
 
 const Dashboard = () => {
@@ -10,7 +21,7 @@ const Dashboard = () => {
 
   // Example financial summary data
   const summary = {
-    income: 50000,
+    income: 30000,
     expenses: 30000,
     balance: 20000,
   };
@@ -23,7 +34,7 @@ const Dashboard = () => {
 
   const barData = [
     { month: "Jan", income: 12000, expenses: 8000 },
-    { month: "Feb", income: 15000, expenses: 10000 },
+    { month: "Feb", income: 13000, expenses: 10000 },
     { month: "Mar", income: 17000, expenses: 12000 },
   ];
 
@@ -63,7 +74,10 @@ const Dashboard = () => {
                     label
                   >
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -73,7 +87,9 @@ const Dashboard = () => {
 
             {/* Bar Chart */}
             <div className="p-4 bg-gray-100 rounded shadow">
-              <h2 className="font-semibold text-xl mb-4">Monthly Performance</h2>
+              <h2 className="font-semibold text-xl mb-4">
+                Monthly Performance
+              </h2>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={barData}>
                   <CartesianGrid strokeDasharray="3 3" />

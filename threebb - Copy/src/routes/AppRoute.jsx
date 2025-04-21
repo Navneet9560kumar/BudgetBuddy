@@ -15,6 +15,7 @@ import Deatils from "../Components/pages/Details";
 
 import LoginPage from "../Components/pages/auth/Login";
 import SignupPage from "../Components/pages/auth/SingupPage";
+import Profit from "../Components/pages/profile/Profit";
 
 
 
@@ -44,6 +45,7 @@ const AppRoutes = ({ showSidebar, setShowSidebar }) => {
           <Route path="/budget" element={<Budget />} />
           <Route path="/add-expense" element={<AddExpense />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/profit" element={<Profit/>} />
           <Route path="/learn-more" element={<LearnMore />} /> {/* Add the new LearnMore route */}
           <Route path="/expense" element={<Deatils/>} />
           <Route path="/SingupPage"element={<SignupPage/>}/>

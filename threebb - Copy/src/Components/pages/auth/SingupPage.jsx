@@ -24,7 +24,7 @@ const SignupPage = () => {
     console.log("Sending signup data:", signupData);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch("http://localhost:3000/api/auth/signup", {
         credentials: "include",
         method: "POST",
         headers: {
@@ -53,7 +53,9 @@ const SignupPage = () => {
   return (
     <div className="flex items-center justify-center min-h-[80vh] bg-[#E8F1FF] px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20">
       <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900">Sign Up</h2>
+        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900">
+          Sign Up
+        </h2>
 
         {errorMessage && (
           <div className="bg-red-100 text-red-700 p-2 mb-4 rounded">
@@ -124,7 +126,9 @@ const SignupPage = () => {
             type="submit"
             disabled={loading}
             className={`w-full mt-4 py-2 font-bold rounded text-white ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#4B7ABD] hover:bg-[#3b66a0]"
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#4B7ABD] hover:bg-[#3b66a0]"
             }`}
           >
             {loading ? "Signing up..." : "Sign Up"}

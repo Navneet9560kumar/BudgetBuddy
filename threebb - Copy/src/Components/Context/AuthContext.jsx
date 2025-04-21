@@ -12,7 +12,7 @@ export const AuthContextProvider = ({ children }) => {
     const verifyUser = async () => {
       console.log("verifying user...");
       try {
-        const res = await fetch("http://localhost:5000/api/auth/verify", {
+        const res = await fetch("http://localhost:3000/api/auth/verify", {
           method: "GET",
           credentials: "include",
         });
@@ -22,9 +22,9 @@ export const AuthContextProvider = ({ children }) => {
           console.log("Befor", isLoggedIn);
           setIsLoggedIn(true);
           console.log("After", isLoggedIn);
-          console.log( "User data form back:", result.user);
+          console.log("User data form back:", result.user);
           setData(result.user || {});
-          console.log( "User data form fro:", data);
+          console.log("User data form fro:", data);
         } else {
           setIsLoggedIn(false);
           setData(null);
@@ -37,12 +37,14 @@ export const AuthContextProvider = ({ children }) => {
         setLoading(false);
       }
     };
-  
+
     verifyUser();
   }, []); //will work on page reload
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, data, setData, loading }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, setIsLoggedIn, data, setData, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -18,7 +18,7 @@ const LoginPage = () => {
     setErrorMessage(null);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -31,15 +31,12 @@ const LoginPage = () => {
       console.log("API Response:", data);
 
       if (res.ok && data.success) {
-
         setData(data.data);
         setIsLoggedIn(true);
-         
 
-         console.log("user data",data.data);
-          localStorage.setItem("userId", data.data.userId); // ✅ Save token for later
-         
-        
+        console.log("user data", data.data);
+        localStorage.setItem("userId", data.data.userId); // ✅ Save token for later
+
         alert("Login successful!");
         navigate("/");
       } else {
@@ -93,7 +90,9 @@ const LoginPage = () => {
             type="submit"
             disabled={loading}
             className={`w-full mt-4 py-2 font-bold rounded text-white ${
-              loading ? "bg-gray-400 cursor-not-allowed" : "bg-[#4B7ABD] hover:bg-[#3b66a0]"
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#4B7ABD] hover:bg-[#3b66a0]"
             }`}
           >
             {loading ? "Signing in..." : "Sign In"}

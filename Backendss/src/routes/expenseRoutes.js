@@ -1,6 +1,6 @@
 // src/routes/expenseRoutes.js
 import express from 'express';
-import { createExpense, getExpenses, updateExpense, deleteExpense } from '../Controllers/expenseController.js';
+import { createExpense, getExpenses, updateExpense, deleteExpense,deleteSingleBudget } from '../Controllers/expenseController.js';
 
 import { verifyToken } from '../middlewares/verifyToken.js';
 const expenseRoutes = express.Router();
@@ -25,5 +25,10 @@ expenseRoutes.get('/my', verifyToken, async (req, res) => {
         res.status(500).json({ error: "Failed to fetch expenses", detail: error.message });
       }
     });
+
+
+    expenseRoutes.delete('/delete-all', verifyToken, deleteExpense);
+    expenseRoutes.delete("/:id", verifyToken, deleteSingleBudget);
+
     
 export default expenseRoutes ;

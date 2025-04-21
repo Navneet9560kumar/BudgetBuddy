@@ -2,9 +2,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
+import { FaCheckCircle, FaExclamationTriangle, FaTrash } from 'react-icons/fa';
 
-const BudgetTable = ({ budgets }) => {
+const BudgetTable = ({ budgets, handleDelete }) => {
   const calculateProgress = (spent, allocated) => {
     return (spent / allocated) * 100;
   };
@@ -18,6 +18,7 @@ const BudgetTable = ({ budgets }) => {
             <th className="py-3 px-6">Allocated</th>
             <th className="py-3 px-6">Spent</th>
             <th className="py-3 px-6">Progress</th>
+            <th className="py-3 px-6">Action</th> {/* ✅ New column */}
           </tr>
         </thead>
         <tbody className="bg-white">
@@ -34,7 +35,7 @@ const BudgetTable = ({ budgets }) => {
               <td className="py-4 px-6 text-gray-700">₹{budget.spent}</td>
               <td className="py-4 px-6">
                 <div className="relative pt-1">
-                  <div className="flex mb-4 items-center justify-between"> {/* Increased space */}
+                  <div className="flex mb-4 items-center justify-between">
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -64,6 +65,14 @@ const BudgetTable = ({ budgets }) => {
                     </div>
                   </div>
                 </div>
+              </td>
+              <td className="py-4 px-6">
+                <button
+                  onClick={() => handleDelete(budget.id)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <FaTrash />
+                </button>
               </td>
             </motion.tr>
           ))}

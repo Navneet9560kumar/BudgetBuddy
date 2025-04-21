@@ -52,14 +52,14 @@ export const signup = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "lax", // yaha chnage keya hai mani 
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
     res.status(200).json({
       success: true,
       message: "Signup successful",
-      data: { name: newUser.name, email: newUser.email },
+      data: { name: newUser.name,first:newUser.firsttime, email: newUser.email,userId: newUser._id  },
     });
   } catch (error) {
     res
@@ -116,7 +116,7 @@ export const login = async (req, res) => {
       success: true,
       message: "Login successful",
       token,
-      data: { name: user.name, email: user.email, userId: user._id },
+      data: { name: user.name, email: user.email,first: user.firsttime, userId: user._id },
     });
   } catch (error) {
     res
@@ -177,3 +177,36 @@ export const verify = async (req, res) => {
       .json({ authenticated: false, message: "Invalid token" });
   }
 };
+
+// first
+
+export const first = async (req, res) => {
+  console.log("reached");
+  const {userId} = req.params;
+
+  
+
+  try {
+  
+    const user = await User.findOne({
+      _id: userId,
+      
+    });
+    console.log("user",user);
+    if(user.firsttime ){
+      user.firsttime = false;
+      await user.save();
+      return res.status(200).json({ success: true });
+    }else{
+      return res.status(200).json({ success: false });
+    }
+
+  } catch (error) {
+    return res
+      .status(403)
+      .json({ authenticated: false, message: "Invalid token" });
+  }
+};
+
+// first
+

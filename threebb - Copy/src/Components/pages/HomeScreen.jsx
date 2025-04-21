@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 "use client";
@@ -14,6 +15,33 @@ import AboutUs from "./Component/HomeScreens/AboutUs";
 import Contact from "./Contact";
 import { useAuthContext } from "../Context/AuthContext";
 
+
+// profile section 
+
+const handleProfileClick = async () => {
+  const userId = localStorage.getItem("userId");
+  if (!userId) return;
+  
+  try {
+    const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+      method: "GET",
+      credentials: "include", // important
+    });
+
+    const data = await res.json();
+    // Assuming you already have a profile page set up or want to show inline modal
+    navigate("/profile", { state: { profileData: data } }); 
+  } catch (err) {
+    console.error("Error fetching profile:", err);
+  }
+};
+
+
+
+
+
+
+
 // Adjust the import path as necessary
 
 const HomeScreen = ({ setShowSidebar }) => {
@@ -29,25 +57,33 @@ const HomeScreen = ({ setShowSidebar }) => {
   const contactRef = useRef(null);
 
   const handleGetStarted =  async() => {//  to bhai see aaasa hai ke  checkneBharahaikenahi ko call kar leya kuki ye data bend se aa raha hia to Agar user ne details bhare hain, to navigate("/dashboard")   Agar nahi bhare, to navigate("/details")
+    
     await checkneBharahaikenahi();
     setShowSidebar(true);
  
   };
 
 // check karo user login hai ya nahi
+
 const checkneBharahaikenahi = async () => {
+
   const userId = localStorage.getItem("userId");
+  console.log("user id");
   if (!userId) return;
 
   try {
-    const res = await fetch(`http://localhost:5000/api/expenses/user/${userId}`, {
-      method: "GET",
-      credentials: "include", // yaad rakh bhai ye yaha hona chaiye , not inside headers
-    });
+    const res = await fetch(
+      `http://localhost:3000/api/auth/first/${userId}`,
+      {
+        method: "GET",
+        credentials: "include", // yaad rakh bhai ye yaha hona chaiye , not inside headers
+      }
+    );
 
+    console.log("user id kay hia");
     const data = await res.json(); //  is se hamko response body mil jaegi
-
-    if (data.length > 0) {
+console.log("Data is ", data);
+    if (!data.success) {
       navigate("/dashboard");
     } else {
       navigate("/expense");
@@ -62,7 +98,7 @@ const checkneBharahaikenahi = async () => {
 
   const  handleLogout = async() => {
     setShowSidebar(false);
-    await fetch ("http://localhost:5000/api/auth/logout", {
+    await fetch ("http://localhost:3000/api/auth/logout", {
       method: "GET",
       credentials: "include",})
     navigate("/Login");
@@ -122,15 +158,16 @@ const checkneBharahaikenahi = async () => {
       <div className="fixed top-4 right-4 z-20 flex items-center gap-4">
         {isLoggedIn ? (
           <>
-            <Avatar className="border-2 border-white">
-              <AvatarImage
-                src={user?.profileImageUrl}
-                alt={`${user?.firstName}'s Profile`}
-              />
-              <AvatarFallback className="bg-gray-800 text-white">
-                {user?.firstName?.[0] || "U"}
-              </AvatarFallback>
-            </Avatar>
+          <Avatar className="border-2 border-white cursor-pointer" onClick={handleProfileClick}>
+  <AvatarImage
+    src={user?.profileImageUrl}
+    alt={`${user?.firstName}'s Profile`}
+  />
+  <AvatarFallback className="bg-gray-800 text-white">
+    {user?.firstName?.[0] || "N"}
+  </AvatarFallback>
+</Avatar>
+
             <Button
               variant="destructive"
               onClick={handleLogout}
